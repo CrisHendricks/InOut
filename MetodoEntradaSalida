@@ -1,0 +1,49 @@
+Runtime rt = Runtime.getRuntime();
+        Process p = null;
+        try {
+            p = rt.exec("java TaskList");
+        } catch (IOException ex) {
+            Logger.getLogger(InOut.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        InputStream is = p.getInputStream();
+        InputStreamReader isr = null;
+        try {
+            isr = new InputStreamReader(is, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(InOut.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        BufferedReader br = new BufferedReader(isr);
+        String line;
+        String texto = "";
+        String palabra = texto2.getText();
+        
+        //java.io.OutputStream os = p.getOutputStream(); 
+         OutputStreamWriter o2=new OutputStreamWriter(p.getOutputStream());
+        BufferedWriter b2=new BufferedWriter(o2);
+        try {
+            
+           b2.write(palabra);
+           b2.close();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(InOut.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        try {
+            while ((line = br.readLine()) != null) {
+
+                if (line.contains(palabra)) {
+                    
+                    texto += line + "\n";
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(InOut.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        texto1.setText(texto);
+        try {
+            p.waitFor();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(InOut.class.getName()).log(Level.SEVERE, null, ex);
+        }
